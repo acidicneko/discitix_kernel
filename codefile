@@ -1,0 +1,46 @@
+(cc)i686-elf-gcc(cc)
+(flags) -I inc/ -std=gnu99 -fno-pie -ffreestanding -nostdlib -O2 -Wall -Wextra(flags)
+
+(kobjs)
+build/boot.o build/gdt_asm.o build/gdt.o build/idt.o build/isr.o build/irq.o build/timer.o build/console.o 
+build/idt_asm.o build/kbd.o build/version.o build/port.o build/string.o build/terminal.o build/main.o
+(kobjs)
+
+
+<src>
+nasm -felf32 -o build/boot.o src/cpu/boot.asm;
+nasm -felf32 -o build/gdt_asm.o src/cpu/gdt.asm;
+nasm -felf32 -o build/idt_asm.o src/cpu/idt.asm;
+$cc$ -c src/cpu/port.c -o build/port.o $flags$;
+$cc$ -c src/cpu/gdt.c -o build/gdt.o $flags$;
+$cc$ -c src/cpu/idt.c -o build/idt.o $flags$;
+$cc$ -c src/cpu/isr.c -o build/isr.o $flags$;
+$cc$ -c src/cpu/irq.c -o build/irq.o $flags$;
+$cc$ -c src/klibc/string.c -o build/string.o $flags$;
+$cc$ -c src/misc/version.c -o build/version.o $flags$;
+$cc$ -c src/devices/terminal.c -o build/terminal.o $flags$;
+$cc$ -c src/devices/console.c -o build/console.o $flags$;
+$cc$ -c src/devices/timer.c -o build/timer.o $flags$;
+$cc$ -c src/devices/kbd.c -o build/kbd.o $flags$;
+$cc$ -c src/main.c -o build/main.o $flags$;
+i686-elf-gcc -T link.ld -o kernel.bin -ffreestanding -O2 -nostdlib $kobjs$ -lgcc;
+<src>
+
+<iso>
+grub-file --is-x86-multiboot kernel.bin;
+cp kernel.bin isodir/boot/kernel.bin;
+cp grub.cfg isodir/boot/grub/grub.cfg;
+grub-mkrescue -o myos.iso isodir;
+<iso>
+
+<main>
+%src%;%iso%;
+<main>
+
+<run>
+qemu-system-x86_64 myos.iso;
+<run>
+
+<all>
+%main%;%run%;
+<all>

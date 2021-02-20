@@ -1,0 +1,9 @@
+# all object files
+build/*.o
+
+# kernel file
+kernel.bin
+myos.iso
+isodir/
+
+bak_for_idt.txt
