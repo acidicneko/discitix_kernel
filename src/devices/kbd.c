@@ -102,7 +102,7 @@ void handleKey_normal(uint8_t scancode){
   char ascii = translate(scancode);
   if(ascii > 0){
     buf_char = ascii;
-    putc(ascii);
+    //putc(ascii);
   }
   last_scancode = scancode;
 }
@@ -112,7 +112,7 @@ char keyboard_read(){
     asm volatile("sti;hlt;cli");
   }
   irq_done = 0;
-  putc(buf_char);
+  //putc(buf_char);
   return buf_char;
 }
 
