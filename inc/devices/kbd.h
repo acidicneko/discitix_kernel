@@ -14,7 +14,8 @@
 void keyboard_handler(struct regs *r);
 void keyboard_install(void);
 char translate(uint8_t scancode);
-void handleKey(uint8_t scancode);
+void handleKey_normal(uint8_t scancode);
+void handleKey_arrow(uint8_t scancode);
 char keyboard_read();
 
 extern void pause();

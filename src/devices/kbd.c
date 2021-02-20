@@ -31,26 +31,14 @@ void keyboard_handler(struct regs *r)
     (void)r;
     uint8_t scancode;
     scancode = inportb(0x60);
-    if(last_scancode == 0xE0){
-      if(scancode == 0x48){
-        terminal_sety(terminal_gety() - 1);
-        last_scancode = 0;
-      }
-      else if(scancode == 0x50){
-        terminal_sety(terminal_gety() + 1);
-        last_scancode = 0;
-      }
-      else if(scancode == 0x4B){
-        terminal_setx(terminal_getx() - 1);
-        last_scancode = 0;
-      }
-      else if(scancode == 0x4D){
-        terminal_setx(terminal_getx() + 1);
-        last_scancode = 0;
-      }
+    switch(last_scancode){
+      case 0xE0:
+        handleKey_arrow(scancode);
+        break;
+      default:
+        handleKey_normal(scancode);
+        break;
     }
-    else
-      handleKey(scancode);
     irq_done = 1;
 }
 
@@ -70,7 +58,26 @@ char translate(uint8_t scancode){
   return keyMap_normal[scancode];
 }
 
-void handleKey(uint8_t scancode){
+void handleKey_arrow(uint8_t scancode){
+  switch(scancode){
+    case 0x48:
+      terminal_sety(terminal_gety() - 1);
+      break;
+    case 0x50:
+      terminal_sety(terminal_gety() + 1);
+      break;
+    case 0x4B:
+      terminal_setx(terminal_getx() - 1);
+      break;
+    case 0x4D:
+      terminal_setx(terminal_getx() + 1);
+      break;
+  }
+
+  last_scancode = scancode;
+}
+
+void handleKey_normal(uint8_t scancode){
   switch(scancode){
     case LEFT_SHIFT_PRESSED:
       isShift = 1;
@@ -95,7 +102,7 @@ void handleKey(uint8_t scancode){
   char ascii = translate(scancode);
   if(ascii > 0){
     buf_char = ascii;
-    //putc(ascii);
+    putc(ascii);
   }
   last_scancode = scancode;
 }
