@@ -205,15 +205,19 @@ void kprintf(char *str, ...){
     va_end(arg);
 }
 
-void gets(){
+void gets(char *buffer){
     char c;
+    int i = 0;
     while(1){
         c = keyboard_read();
         if(c == '\n'){
-            //putc('\n');
-            return;
+            buffer[i] = 0;
+            putc('\n');
+            break;
         }
-       
-            //putc(c);
+       else{
+           buffer[i] = c;
+           i++;
+       }
     }
 }

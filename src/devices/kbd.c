@@ -26,20 +26,19 @@ const char keyMap_shift[58] = {
   'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0, '*', 0, ' ',
 };
 
-void keyboard_handler(struct regs *r)
-{
-    (void)r;
-    uint8_t scancode;
-    scancode = inportb(0x60);
-    switch(last_scancode){
-      case 0xE0:
-        handleKey_arrow(scancode);
-        break;
-      default:
-        handleKey_normal(scancode);
-        break;
-    }
-    irq_done = 1;
+void keyboard_handler(struct regs *r){
+  (void)r;
+  uint8_t scancode;
+  scancode = inportb(0x60);
+  switch(last_scancode){
+    case 0xE0:
+      handleKey_arrow(scancode);
+      break;
+    default:
+      handleKey_normal(scancode);
+      break;
+  }
+  irq_done = 1;
 }
 
 
@@ -102,7 +101,7 @@ void handleKey_normal(uint8_t scancode){
   char ascii = translate(scancode);
   if(ascii > 0){
     buf_char = ascii;
-    //putc(ascii);
+    putc(buf_char);
   }
   last_scancode = scancode;
 }
@@ -112,7 +111,6 @@ char keyboard_read(){
     asm volatile("sti;hlt;cli");
   }
   irq_done = 0;
-  //putc(buf_char);
   return buf_char;
 }
 

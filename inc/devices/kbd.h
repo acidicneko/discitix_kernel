@@ -18,8 +18,6 @@ void handleKey_normal(uint8_t scancode);
 void handleKey_arrow(uint8_t scancode);
 char keyboard_read();
 
-extern void pause();
-extern void sys_cli();
-extern void sys_sti();
+
 
 #endif

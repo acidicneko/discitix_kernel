@@ -17,12 +17,7 @@ void kmain(){
     timer_install();
     keyboard_install();
     print_info();
-    char c;
-    while(1){
-        c = keyboard_read();
-        putc(c);
-    }
     for(;;){
-        asm("hlt");
+        asm("sti;hlt");
     }
 }
