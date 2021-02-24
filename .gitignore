@@ -5,5 +5,5 @@ build/*.o
 kernel.bin
 myos.iso
 isodir/
-
+notes/
 bak_for_idt.txt
