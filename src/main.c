@@ -17,6 +17,7 @@ void kmain(){
     timer_install();
     keyboard_install();
     print_info();
+    puts("Launching shell(shell.o) via shell_entry()...\n");
     shell_entry();
 
     for(;;){
