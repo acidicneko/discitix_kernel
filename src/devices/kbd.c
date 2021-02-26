@@ -38,7 +38,6 @@ void keyboard_handler(struct regs *r){
       handleKey_normal(scancode);
       break;
   }
-  irq_done = 1;
 }
 
 
@@ -101,7 +100,8 @@ void handleKey_normal(uint8_t scancode){
   char ascii = translate(scancode);
   if(ascii > 0){
     buf_char = ascii;
-    putc(buf_char);
+    irq_done = 1;
+    //putc(buf_char);
   }
   last_scancode = scancode;
 }

@@ -216,6 +216,7 @@ void gets(char *buffer){
             break;
         }
        else{
+           putc(c);
            buffer[i] = c;
            i++;
        }

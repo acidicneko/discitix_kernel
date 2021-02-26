@@ -6,7 +6,7 @@
 #include "devices/kbd.h"
 #include "klibc/string.h"
 #include "misc/version.h"
-
+#include "misc/shell.h"
 
 void kmain(){
     init_terminal(WHITE, BLACK);
@@ -17,6 +17,8 @@ void kmain(){
     timer_install();
     keyboard_install();
     print_info();
+    shell_entry();
+
     for(;;){
         asm("sti;hlt");
     }
