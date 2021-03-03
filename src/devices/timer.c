@@ -3,7 +3,7 @@
 #include "devices/timer.h"
 #include "devices/terminal.h"
 
-volatile unsigned int timer_ticks = 0;
+volatile uint32_t timer_ticks = 0;
 
 void timer_handler(struct regs *r){
     (void)r;
@@ -26,6 +26,10 @@ void timer_wait(int ticks){
     while(timer_ticks < eticks){
         asm volatile("sti;hlt;cli");
     }
+}
+
+uint32_t get_ticks(){
+    return timer_ticks;
 }
 
 void sleep(int ms){

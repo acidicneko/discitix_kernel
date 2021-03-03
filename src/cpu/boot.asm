@@ -26,7 +26,8 @@ mboot:
 
 stublet:
     extern kmain
-    call kmain                ;gonna add extern C function calling here
+    push ebx
+    call kmain
     jmp $
 
 SECTION .bss

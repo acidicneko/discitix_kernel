@@ -16,8 +16,9 @@ char *strcat(char *d, const char *s);
 char *strtok(char *s, const char *delim);
 const char *strchr(const char *s, char ch);
 
-uint32_t dgcount(int num);
+//uint32_t dgcount(int num);
 void itoa(int num, char *dest);
+void utoa(uint32_t num, char *dest);
 void puts(const char *str);
 void putc(char ch);
 void kprintf(char *str, ...);

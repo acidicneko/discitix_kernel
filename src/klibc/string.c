@@ -2,7 +2,19 @@
 #include "devices/terminal.h"
 #include "devices/kbd.h"
 
-uint32_t dgcount(int num){
+uint32_t idgcount(int num){
+    uint32_t count = 0;
+    if(num == 0){
+        return 1;
+    }
+    while(num > 0){
+        count++;
+        num = num/10;
+    }
+    return count;
+}
+
+uint32_t uldgcount(uint32_t num){
     uint32_t count = 0;
     if(num == 0){
         return 1;
@@ -15,8 +27,29 @@ uint32_t dgcount(int num){
 }
 
 void itoa(int num, char *dest){
-    int dcount = dgcount(num);
+    int dcount = idgcount(num);
     int index = dcount -1;
+    char x;
+    if(num == 0 && dcount == 1){
+        dest[0] = '0';
+        dest[1] = '\0';
+    }
+    if(num < 0)
+        dest[0] = '-';
+    else{
+        while(num != 0){
+            x = num % 10;
+            dest[index] = x + '0';
+            index--;
+            num = num/10;
+        }
+        dest[dcount] = '\0';
+    }
+}
+
+void utoa(uint32_t num, char *dest){
+    uint32_t dcount = uldgcount(num);
+    uint32_t index = dcount -1;
     char x;
     if(num == 0 && dcount == 1){
         dest[0] = '0';
@@ -32,6 +65,7 @@ void itoa(int num, char *dest){
         dest[dcount] = '\0';
     }
 }
+
 
 int strlen(const char* str) {
 	int len = 0;
@@ -168,9 +202,26 @@ void puts(const char *str){
     terminal_putstr(str);
 }
 
+void putint(int integer){
+    char temp[] = "";
+    itoa(integer, temp);
+    /*if(integer < 0)
+        putc('-');*/
+    puts(temp);
+}
+
+void putuint(uint32_t unsignedInt){
+    char temp[] = "";
+    utoa(unsignedInt, temp);
+    puts(temp);
+}
+
 void kprintf(char *str, ...){
     int integer;
     char character;
+    uint32_t unsignedLong;
+    uint16_t unsignedShort;
+    uint8_t unsignedChar;
     char *string;
     va_list arg;
     va_start(arg, str);
@@ -182,11 +233,22 @@ void kprintf(char *str, ...){
                     character = va_arg(arg, int);
                     putc(character);
                     break;
+                case 'i':
                 case 'd':
                     integer = va_arg(arg, int);
-                    char temp[] = "";
-                    itoa(integer, temp);
-                    puts(temp);
+                    putint(integer);
+                    break;
+                case 'U':
+                    unsignedLong = va_arg(arg, uint32_t);
+                    putuint(unsignedLong);
+                    break;
+                case 'u':
+                    unsignedShort = va_arg(arg, int);
+                    putuint((uint32_t)unsignedShort);
+                    break;
+                case 'h':
+                    unsignedChar = va_arg(arg, int);
+                    putuint((uint32_t)unsignedChar);
                     break;
                 case 's':
                     string = va_arg(arg, char *);
@@ -215,10 +277,16 @@ void gets(char *buffer){
             putc('\n');
             break;
         }
-       else{
-           putc(c);
-           buffer[i] = c;
-           i++;
-       }
+        else if(c == '\b'){
+            if(i > 0){
+                putc('\b');
+                i = i - 1;
+            }
+        }
+        else{
+            putc(c);
+            buffer[i] = c;
+            i++;
+        }
     }
 }
