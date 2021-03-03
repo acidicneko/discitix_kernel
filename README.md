@@ -1,6 +1,8 @@
 # Wolf X Kernel
 A hobbyist kernel written in C!
 
+![Settings Window](https://raw.githubusercontent.com/ayush7788/wolfx_kernel/main/screenshots/sysfetch_running.png)
+
 ## Milestones
 - [x] Booting
 - [x] VGA Driver
