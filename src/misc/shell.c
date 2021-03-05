@@ -5,25 +5,27 @@
 #include "devices/timer.h"
 #include "devices/vga.h"
 #include "misc/version.h"
+#include "mm/memory.h"
 
 void uptime(){
     int seconds = get_ticks() / 18;
     if(seconds < 60)
-        kprintf("kernel uptime: %d second(s)\n", seconds);
+        kprintf("kernel uptime: \t%d second(s)\n", seconds);
     else{
         int minutes = 0;
         while(seconds > 59){
             seconds-=60;
             minutes++;
         }
-        kprintf("kernel uptime: %d minute(s) %d second(s)\n", minutes, seconds);
+        kprintf("kernel uptime: \t%d minute(s) %d second(s)\n", minutes, seconds);
     }
 }
 
 void sysfetch(){
     puts("---------sysfetch---------\n");
-    kprintf("kernel: %s %d.%d.%d_%s\nshell: KSH 1.0.0\n", name, version, build_maj, build_min, state);
+    kprintf("kernel: \t%s %d.%d.%d_%s\nshell: \t\tKSH 1.0.0\n", name, version, build_maj, build_min, state);
     uptime();
+    kprintf("total memory: \t%U MB\n", get_mem_bytes()/1024/1024);
     for(uint8_t i = 0; i<=7; i++){
         terminal_putchar_col(' ', terminal_fg(), i);
         terminal_putchar_col(' ', terminal_fg(), i);

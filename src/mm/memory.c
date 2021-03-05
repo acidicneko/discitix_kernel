@@ -17,6 +17,10 @@ void print_memory(multiboot_info_t* mbootptr){
     kprintf("\tTotal RAM: %U MB\n", memory_bytes/1024/1024);
 }
 
+uint32_t get_mem_bytes(){
+    return memory_bytes;
+}
+
 void calculate_mem(multiboot_info_t* mbootptr){
     multiboot_memory_map_t *entry = (multiboot_memory_map_t*)mbootptr->mmap_addr;
     uint32_t mem_limit = mbootptr->mmap_addr + mbootptr->mmap_length;
