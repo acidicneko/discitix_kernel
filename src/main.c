@@ -10,7 +10,7 @@
 #include "misc/version.h"
 #include "misc/shell.h"
 
-void kmain(struct multiboot_info* mboot){
+void kmain(multiboot_info_t* mboot){
     init_terminal(WHITE, BLACK);
     gdt_install();
     idt_install();
@@ -21,7 +21,7 @@ void kmain(struct multiboot_info* mboot){
     print_memory(mboot);
     print_info();
 
-    puts("Launching shell(shell.o) via shell_entry()...\n");
+    puts("Launching kshell...\n");
     shell_entry();
 
     for(;;){
