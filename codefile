@@ -3,7 +3,7 @@
 
 (kobjs)
 build/boot.o build/gdt_asm.o build/gdt.o build/idt.o build/isr.o build/irq.o build/timer.o build/console.o 
-build/memory.o build/bitmap.o 
+build/memory.o build/bitmap.o build/frame.o 
 build/idt_asm.o build/kbd.o build/shell.o build/version.o build/port.o build/string.o build/terminal.o build/main.o
 (kobjs)
 
@@ -21,6 +21,7 @@ $cc$ -c src/klibc/string.c -o build/string.o $flags$;
 $cc$ -c src/misc/version.c -o build/version.o $flags$;
 $cc$ -c src/mm/memory.c -o build/memory.o $flags$;
 $cc$ -c src/mm/bitmap.c -o build/bitmap.o $flags$;
+$cc$ -c src/mm/frame.c -o build/frame.o $flags$;
 $cc$ -c src/misc/shell.c -o build/shell.o $flags$;
 $cc$ -c src/devices/terminal.c -o build/terminal.o $flags$;
 $cc$ -c src/devices/console.c -o build/console.o $flags$;

@@ -8,10 +8,9 @@
 #include "klibc/string.h"
 #include "mm/bitmap.h"
 #include "mm/memory.h"
+#include "mm/frame.h"
 #include "misc/version.h"
 #include "misc/shell.h"
-
-uint8_t test_buf[20];
 
 void kmain(multiboot_info_t* mboot){
     init_terminal(WHITE, BLACK);
@@ -24,6 +23,9 @@ void kmain(multiboot_info_t* mboot){
     keyboard_install();
     print_info();
 
+    kprintf("Free RAM: %U \nUsed RAM: %U\nReserved RAM: %U", get_free_memory(), get_used_memory(), get_reserved_memory());
+    read_multiboot_mem_map_entry(mboot);
+    kprintf("Free RAM: %U \nUsed RAM: %U\nReserved RAM: %U", get_free_memory(), get_used_memory(), get_reserved_memory());
     //puts("Launching kshell...\n");
     //shell_entry();
 
