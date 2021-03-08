@@ -18,16 +18,13 @@ void kmain(multiboot_info_t* mboot){
     idt_install();
     isrs_install();
     irq_install();
-    print_memory(mboot);
+    read_multiboot_mem_map_entry(mboot);
     timer_install();
     keyboard_install();
     print_info();
 
-    kprintf("Free RAM: %U \nUsed RAM: %U\nReserved RAM: %U", get_free_memory(), get_used_memory(), get_reserved_memory());
-    read_multiboot_mem_map_entry(mboot);
-    kprintf("Free RAM: %U \nUsed RAM: %U\nReserved RAM: %U", get_free_memory(), get_used_memory(), get_reserved_memory());
-    //puts("Launching kshell...\n");
-    //shell_entry();
+    puts("Launching kshell...\n");
+    shell_entry();
 
     for(;;){
         asm("sti;hlt");

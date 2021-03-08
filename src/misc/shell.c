@@ -6,6 +6,7 @@
 #include "devices/vga.h"
 #include "misc/version.h"
 #include "mm/memory.h"
+#include "mm/frame.h"
 
 void uptime(){
     int seconds = get_ticks() / 18;
@@ -74,6 +75,9 @@ int shell_entry(){
 
         else if(strcmp(input, "uptime") == 0)
             uptime();
+        
+        else if(strcmp(input, "mem_read") == 0)
+            kprintf("Free memory: %U bytes\nUsed memory: %U bytes\n", get_free_memory(), get_used_memory());
 
         else
             kprintf("kshell: unknown command: %s\n", input);

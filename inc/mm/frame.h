@@ -13,6 +13,7 @@ void free_page(void* address);
 void lock_page(void* address);
 void unreserve_page(void* address);
 void reserve_page(void* address);
+void* request_page();
 
 void free_pages(void* address, uint32_t page_count);
 void lock_pages(void* address, uint32_t page_count);
