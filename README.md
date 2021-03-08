@@ -1,7 +1,7 @@
 # Wolf X Kernel
 A hobbyist kernel written in C!
 
-![Settings Window](https://raw.githubusercontent.com/ayush7788/wolfx_kernel/main/screenshots/detecting_mem.png)
+![Settings Window](https://raw.githubusercontent.com/ayush7788/wolfx_kernel/main/screenshots/page_frame.png)
 
 ## Milestones
 - [x] Booting
