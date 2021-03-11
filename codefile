@@ -3,7 +3,7 @@
 
 (kobjs)
 build/boot.o build/gdt_asm.o build/gdt.o build/idt.o build/isr.o build/irq.o build/timer.o build/console.o 
-build/memory.o build/bitmap.o build/frame.o 
+build/memory.o build/bitmap.o build/frame.o build/log.o 
 build/idt_asm.o build/kbd.o build/shell.o build/version.o build/port.o build/string.o build/terminal.o build/main.o
 (kobjs)
 
@@ -27,6 +27,7 @@ $cc$ -c src/devices/terminal.c -o build/terminal.o $flags$;
 $cc$ -c src/devices/console.c -o build/console.o $flags$;
 $cc$ -c src/devices/timer.c -o build/timer.o $flags$;
 $cc$ -c src/devices/kbd.c -o build/kbd.o $flags$;
+$cc$ -c src/utility/log.c -o build/log.o $flags$;
 $cc$ -c src/main.c -o build/main.o $flags$;
 i686-elf-gcc -T link.ld -o kernel.bin -ffreestanding -O2 -nostdlib $kobjs$ -lgcc;
 <src>

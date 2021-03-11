@@ -1,5 +1,5 @@
 #include "cpu/dt.h"
-#include "devices/terminal.h"
+#include "utility/log.h"
 #include "klibc/string.h"
 
 struct idt_entry
@@ -87,5 +87,5 @@ void idt_install()
     idtp.base = (uint32_t)&idt;
     memset(&idt, 0, sizeof(struct idt_entry) * 256);
     idt_load(&idtp);
-    info("IDT Loaded");
+    log(INFO, "IDT loaded\n");
 }

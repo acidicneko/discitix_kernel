@@ -2,6 +2,8 @@
 #include "devices/vga.h"
 #include "devices/terminal.h"
 #include "devices/kbd.h"
+#include "utility/log.h"
+
 
 // cursor cordinates
 uint8_t x_pos = 0;
@@ -159,5 +161,5 @@ void init_terminal(uint8_t fg, uint8_t bg){
     def_bg = bg;
     def_fg = fg;
     terminal_clear(fg, bg);
-    info("Terminal Driver Loaded");
+    log(INFO, "VGA driver Loaded\n");
 }

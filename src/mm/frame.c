@@ -1,6 +1,7 @@
 #include "mm/frame.h"
 #include "mm/memory.h"
 #include "klibc/string.h"
+#include "utility/log.h"
 #include "devices/terminal.h"
 
 static bitmap_t page_bitmap;
@@ -10,6 +11,9 @@ uint32_t reserved_memory = 0;
 uint32_t used_memory = 0;
 
 bool initialized = false;
+
+extern uint32_t kernel_start;
+extern uint32_t end;
 
 void read_multiboot_mem_map_entry(multiboot_info_t* mbootptr){
     calculate_mem(mbootptr);
@@ -33,11 +37,15 @@ void read_multiboot_mem_map_entry(multiboot_info_t* mbootptr){
 
     uint32_t mem_size = get_mem_bytes();
     free_memory = mem_size;
-    info("Memory Map loaded");
-    kprintf("\tTotal system memory: %U Bytes, %U KB, %U MB\n", get_mem_bytes(), get_mem_bytes()/1024, get_mem_bytes()/1024/1024);
+    reserve_pages(0, 512);
+    uint32_t kernel_pages = ((uintptr_t)&end - (uintptr_t)&kernel_start) / 4096 + 1;
+    reserve_pages(&kernel_start, kernel_pages);
     uint32_t bitmap_size = mem_size / 4096 / 8 + 1;
     init_bitmap(bitmap_size, largest_free_mem_seg);
     lock_pages(&page_bitmap, page_bitmap.size / 4096 + 1);
+    info("Memory Map loaded");
+    kprintf("\tTotal system memory: %U Bytes, %U KB, %U MB\n", mem_size, mem_size/1024, mem_size/1024/1024);
+    //log(INFO, "Memory Map loaded\n\tTotal system memory: %U Bytes, %U KB, %U MB\n", mem_size, mem_size/1024, mem_size/1024/1024);
 }
 
 void init_bitmap(size_t bitmap_size, void* buf_addr){

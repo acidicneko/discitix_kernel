@@ -1,6 +1,6 @@
 #include "cpu/dt.h"
 #include "cpu/port.h"
-#include "devices/terminal.h"
+#include "utility/log.h"
 
 extern void irq0();
 extern void irq1();
@@ -64,7 +64,7 @@ void irq_install(){
     idt_set_gate(46, (unsigned)irq14, 0x08, 0x8E);
     idt_set_gate(47, (unsigned)irq15, 0x08, 0x8E);
     asm volatile ("sti");
-    info("IRQs Installed");
+    log(INFO, "IRQs Installed\n");
 }
 
 void irq_handler(struct regs *r){

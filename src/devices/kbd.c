@@ -1,6 +1,7 @@
 #include "devices/terminal.h"
 #include "devices/kbd.h"
 #include "klibc/string.h"
+#include "utility/log.h"
 
 // keyboard buffer handling
 char buf_char;
@@ -116,5 +117,5 @@ char keyboard_read(){
 
 void keyboard_install(void){
   irq_install_handler(1, keyboard_handler);
-  info("Keyboard Installed");
+  log(INFO, "Keyboard Installed\n");
 }

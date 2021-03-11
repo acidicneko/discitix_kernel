@@ -1,5 +1,5 @@
 #include "cpu/dt.h"
-#include "devices/terminal.h"
+#include "utility/log.h"
 #include "klibc/string.h"
 
 extern void isr0();
@@ -72,7 +72,7 @@ void isrs_install()
     idt_set_gate(29, (unsigned)isr29, 0x08, 0x8E);
     idt_set_gate(30, (unsigned)isr30, 0x08, 0x8E);
     idt_set_gate(31, (unsigned)isr31, 0x08, 0x8E);
-    info("ISRs Installed");
+    log(INFO, "ISRs Installed\n");
 }
 
 const char *exception_messages[] =
@@ -117,9 +117,7 @@ const char *exception_messages[] =
 void fault_handler(struct regs *r)
 {
     if (r->int_no < 32){
-        error("Exception Raised!");
-        puts(exception_messages[r->int_no]);
-        puts(" Exception. System Halted!\n");
+        log(ERROR, "Exception Raised! %s exception. System Halted!\n", exception_messages[r->int_no]);
         for (;;);
     }
 }

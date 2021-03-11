@@ -11,6 +11,7 @@
 #include "mm/frame.h"
 #include "misc/version.h"
 #include "misc/shell.h"
+#include "utility/log.h"
 
 void kmain(multiboot_info_t* mboot){
     init_terminal(WHITE, BLACK);
@@ -22,7 +23,8 @@ void kmain(multiboot_info_t* mboot){
     timer_install();
     keyboard_install();
     print_info();
-
+    uint32_t test = 12;
+    log(INFO, "%U\n", test/3);
     puts("Launching kshell...\n");
     shell_entry();
 

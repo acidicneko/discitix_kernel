@@ -1,22 +1,18 @@
 #include "cpu/dt.h"
 #include "klibc/string.h"
 #include "devices/timer.h"
-#include "devices/terminal.h"
+#include "utility/log.h"
 
 volatile uint32_t timer_ticks = 0;
 
 void timer_handler(struct regs *r){
     (void)r;
     timer_ticks++;
-    if (timer_ticks % 18 == 0)
-    {
-        //puts("One second has passed\n");
-    }
 }
 
 void timer_install(){
     irq_install_handler(0, timer_handler);
-    info("Timer Installed");
+    log(INFO, "PIT Installed\n");
 }
 
 void timer_wait(int ticks){

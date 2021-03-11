@@ -8,6 +8,12 @@
 #include "mm/memory.h"
 #include "mm/frame.h"
 
+void mem_read(){
+    kprintf("Free memory: %U Bytes, %U KBs, %U MBs\n", get_free_memory(), get_free_memory()/1024, get_free_memory()/1024/1024);
+    kprintf("Used memory: %U Bytes, %U KBs, %U MBs\n", get_used_memory(), get_used_memory()/1024, get_used_memory()/1024/1024);
+    kprintf("Reserved memory: %U Bytes, %U KBs, %U MBs\n", get_reserved_memory(), get_reserved_memory()/1024, get_reserved_memory()/1024/1024);
+}
+
 void uptime(){
     int seconds = get_ticks() / 18;
     if(seconds < 60)
@@ -77,7 +83,7 @@ int shell_entry(){
             uptime();
         
         else if(strcmp(input, "mem_read") == 0)
-            kprintf("Free memory: %U bytes\nUsed memory: %U bytes\n", get_free_memory(), get_used_memory());
+            mem_read();
 
         else
             kprintf("kshell: unknown command: %s\n", input);

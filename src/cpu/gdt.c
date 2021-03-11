@@ -1,5 +1,5 @@
 #include "cpu/dt.h"
-#include "devices/terminal.h"
+#include "utility/log.h"
 
 struct gdt_entry
 {
@@ -43,5 +43,5 @@ void gdt_install()
     gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); /* data segment */
 
     gdt_flush(&gp); /*flush gdt pointer*/
-    info("GDT Loaded");
+    log(INFO, "GDT Loaded\n");
 }
