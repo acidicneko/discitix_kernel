@@ -169,7 +169,7 @@ void error(char *msg){
 }
 
 void init_vga(uint8_t fg, uint8_t bg){
-    strcpy(vga_driver.driver_name, "VGA");
+    strcpy(vga_driver.driver_name, "Standard VGA");
     def_bg = bg;
     def_fg = fg;
     vga_clear(fg, bg);

@@ -6,7 +6,7 @@ display_driver_t* current_driver = NULL;
 void init_tty(display_driver_t* driver, uint8_t fg, uint8_t bg){
     current_driver = driver;
     current_driver->init(fg, bg);
-    log(INFO, "TTY Driver loaded; using %s display driver\n", current_driver->driver_name);
+    log(INFO, "TTY Driver loaded\n\tDisplay driver: %s\n", current_driver->driver_name);
 }
 
 void tty_putchar_col(char c, uint8_t fg, uint8_t bg){
