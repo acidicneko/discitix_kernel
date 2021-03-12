@@ -1,7 +1,7 @@
 #include "klibc/string.h"
 #include "misc/shell.h"
 #include "devices/kbd.h"
-#include "devices/terminal.h"
+#include "devices/tty.h"
 #include "devices/timer.h"
 #include "devices/vga.h"
 #include "misc/version.h"
@@ -34,13 +34,13 @@ void sysfetch(){
     uptime();
     kprintf("total memory: \t%U MB\n", get_mem_bytes()/1024/1024);
     for(uint8_t i = 0; i<=7; i++){
-        terminal_putchar_col(' ', terminal_fg(), i);
-        terminal_putchar_col(' ', terminal_fg(), i);
+        tty_putchar_col(' ', tty_fg(), i);
+        tty_putchar_col(' ', tty_fg(), i);
     }
     putc('\n');
     for(uint8_t i = 8; i<=16; i++){
-        terminal_putchar_col(' ', terminal_fg(), i);
-        terminal_putchar_col(' ', terminal_fg(), i);
+        tty_putchar_col(' ', tty_fg(), i);
+        tty_putchar_col(' ', tty_fg(), i);
     }
     putc('\n');
 }
@@ -74,7 +74,7 @@ int shell_entry(){
             puts("Kernel SHell v1.0.0_aplha\n");
 
         else if(strcmp(input, "clear") == 0)
-            terminal_clear(terminal_fg(), terminal_bg());
+            tty_clear(tty_fg(), tty_bg());
 
         else if(strcmp(input, "sysfetch") == 0)
             sysfetch();

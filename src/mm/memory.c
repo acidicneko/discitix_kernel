@@ -1,6 +1,6 @@
 #include "mm/memory.h"
 #include "klibc/string.h"
-#include "devices/terminal.h"
+#include "utility/log.h"
 
 uint32_t memory_bytes = 0;
 
@@ -13,7 +13,7 @@ char *memory_type_names[6] = {"UNKOWN",
 
 void print_memory(multiboot_info_t* mbootptr){
     calculate_mem(mbootptr);
-    info("Memory Map Loaded");
+    log(INFO, "Memory Map Loaded");
     kprintf("\tTotal RAM: %U MB\n", memory_bytes/1024/1024);
 }
 

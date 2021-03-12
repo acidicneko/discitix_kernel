@@ -1,4 +1,4 @@
-#include "devices/terminal.h"
+#include "devices/tty.h"
 #include "devices/kbd.h"
 #include "klibc/string.h"
 #include "utility/log.h"
@@ -60,16 +60,16 @@ char translate(uint8_t scancode){
 void handleKey_arrow(uint8_t scancode){
   switch(scancode){
     case 0x48:
-      terminal_sety(terminal_gety() - 1);
+      tty_sety(tty_gety() - 1);
       break;
     case 0x50:
-      terminal_sety(terminal_gety() + 1);
+      tty_sety(tty_gety() + 1);
       break;
     case 0x4B:
-      terminal_setx(terminal_getx() - 1);
+      tty_setx(tty_getx() - 1);
       break;
     case 0x4D:
-      terminal_setx(terminal_getx() + 1);
+      tty_setx(tty_getx() + 1);
       break;
   }
 

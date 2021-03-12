@@ -1,4 +1,3 @@
-#include "devices/terminal.h"
 #include "misc/version.h"
 #include "klibc/string.h"
 

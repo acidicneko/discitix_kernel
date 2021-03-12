@@ -1,5 +1,5 @@
 #include "klibc/string.h"
-#include "devices/terminal.h"
+#include "devices/tty.h"
 #include "devices/kbd.h"
 
 uint32_t idgcount(int num){
@@ -195,11 +195,11 @@ char *strtok(char *s, const char *delim)
 // printing functions
 
 void putc(char ch){
-    terminal_putchar(ch);
+    tty_putchar(ch);
 }
 
 void puts(const char *str){
-    terminal_putstr(str);
+    tty_putstr(str);
 }
 
 void putint(int integer){

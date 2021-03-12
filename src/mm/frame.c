@@ -2,7 +2,7 @@
 #include "mm/memory.h"
 #include "klibc/string.h"
 #include "utility/log.h"
-#include "devices/terminal.h"
+#include "devices/tty.h"
 
 static bitmap_t page_bitmap;
 
@@ -43,8 +43,8 @@ void read_multiboot_mem_map_entry(multiboot_info_t* mbootptr){
     uint32_t bitmap_size = mem_size / 4096 / 8 + 1;
     init_bitmap(bitmap_size, largest_free_mem_seg);
     lock_pages(&page_bitmap, page_bitmap.size / 4096 + 1);
-    info("Memory Map loaded");
-    kprintf("\tTotal system memory: %U Bytes, %U KB, %U MB\n", mem_size, mem_size/1024, mem_size/1024/1024);
+    log(INFO, "Memory Map loaded");
+    kprintf("\n\tTotal system memory: %U Bytes, %U KB, %U MB\n", mem_size, mem_size/1024, mem_size/1024/1024);
     //log(INFO, "Memory Map loaded\n\tTotal system memory: %U Bytes, %U KB, %U MB\n", mem_size, mem_size/1024, mem_size/1024/1024);
 }
 

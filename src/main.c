@@ -1,8 +1,6 @@
 #include "cpu/dt.h"
 #include "cpu/multiboot.h"
-#include "devices/vga.h"
-#include "devices/terminal.h"
-#include "devices/console.h"
+#include "devices/tty.h"
 #include "devices/timer.h"
 #include "devices/kbd.h"
 #include "klibc/string.h"
@@ -12,9 +10,11 @@
 #include "misc/version.h"
 #include "misc/shell.h"
 #include "utility/log.h"
+#include "devices/vga.h"
+
 
 void kmain(multiboot_info_t* mboot){
-    init_terminal(WHITE, BLACK);
+    init_tty(&vga_driver, WHITE, BLACK);
     gdt_install();
     idt_install();
     isrs_install();
@@ -23,11 +23,10 @@ void kmain(multiboot_info_t* mboot){
     timer_install();
     keyboard_install();
     print_info();
-    uint32_t test = 12;
-    log(INFO, "%U\n", test/3);
+    
     puts("Launching kshell...\n");
     shell_entry();
-
+    
     for(;;){
         asm("sti;hlt");
     }

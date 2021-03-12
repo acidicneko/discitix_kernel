@@ -1,8 +1,7 @@
 #include "utility/log.h"
-#include "devices/terminal.h"
+#include "devices/tty.h"
 #include "klibc/string.h"
 #include "devices/vga.h"
-
 
 void log(int status, char *str, ...){
     int integer;
@@ -13,8 +12,8 @@ void log(int status, char *str, ...){
     char *string;
     va_list arg;
     va_start(arg, str);
-    if(status == 1) terminal_putstr_col("[INFO] ", GREEN, terminal_bg());
-    else if(status == 2) terminal_putstr_col("[ERROR] ", RED, terminal_bg());
+    if(status == 1) tty_putstr_col("[INFO] ", GREEN, tty_bg());
+    else if(status == 2) tty_putstr_col("[ERROR] ", RED, tty_bg());
     while(*str!=0){
         if(*str == '%'){
             ++str;

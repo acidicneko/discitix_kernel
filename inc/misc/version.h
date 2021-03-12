@@ -4,7 +4,7 @@
 static const char name[] = "Wolf X Kernel";
 static const int version = 1;
 static const int build_maj = 2;
-static const int build_min = 8;
+static const int build_min = 9;
 static const char state[] = "alpha";
 
 void print_info();
