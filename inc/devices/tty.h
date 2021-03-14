@@ -29,5 +29,6 @@ uint32_t tty_gety();
 uint8_t tty_fg();
 uint8_t tty_bg();
 void tty_clear(uint8_t fg, uint8_t bg);
+int tty_cursor(int status);
 
 #endif /* tty.h */

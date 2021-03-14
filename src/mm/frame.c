@@ -44,7 +44,7 @@ void read_multiboot_mem_map_entry(multiboot_info_t* mbootptr){
     init_bitmap(bitmap_size, largest_free_mem_seg);
     lock_pages(&page_bitmap, page_bitmap.size / 4096 + 1);
     log(INFO, "Memory Map loaded");
-    kprintf("\n\tTotal system memory: %U Bytes, %U KB, %U MB\n", mem_size, mem_size/1024, mem_size/1024/1024);
+    kprintf("\n\tKernel start: %xU\tKernel end: %xU\n\tTotal system memory: %U Bytes, %U KB, %U MB\n", kernel_start, end, mem_size, mem_size/1024, mem_size/1024/1024);
     //log(INFO, "Memory Map loaded\n\tTotal system memory: %U Bytes, %U KB, %U MB\n", mem_size, mem_size/1024, mem_size/1024/1024);
 }
 

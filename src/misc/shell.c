@@ -8,6 +8,8 @@
 #include "mm/memory.h"
 #include "mm/frame.h"
 
+#include <stddef.h>
+
 void mem_read(){
     kprintf("Free memory: %U Bytes, %U KBs, %U MBs\n", get_free_memory(), get_free_memory()/1024, get_free_memory()/1024/1024);
     kprintf("Used memory: %U Bytes, %U KBs, %U MBs\n", get_used_memory(), get_used_memory()/1024, get_used_memory()/1024/1024);
@@ -45,47 +47,71 @@ void sysfetch(){
     putc('\n');
 }
 
-int shell_entry(){
-    char input[128];
+
+void execute(int argc, char **argv){
+    const char *cmd = argv[0];
+
+    if(strcmp(cmd, "echo")==0){
+        int temp = 1;
+        while(temp != argc){
+            kprintf("%s ", argv[temp]);
+            temp++;
+        }
+        kprintf("\n");
+    }
+    else if(strcmp(cmd, "sysfetch")==0)
+        sysfetch();
+    
+    else if(strcmp(cmd, "uname")==0)
+        kprintf("%s %d.%d.%d_%s\nBuild %s\n", name, version, build_maj, build_min, state, __DATE__);
+
+    else if(strcmp(cmd, "halt")==0){
+        puts("Halting the system!");
+        asm("hlt");
+    }
+
+    else if(strcmp(cmd, "uptime")==0)
+        uptime();
+
+    else if(strcmp(cmd, "about")==0)
+        kprintf("KSH 1.0.0\n");
+    
+    else if(strcmp(cmd, "clear")==0)
+        tty_clear(tty_fg(), tty_bg());
+
+    else if(strcmp(cmd, "mem")==0)
+        mem_read();
+
+    else if(strcmp(cmd, "help")==0){
+    puts("available commands -> \n\
+help - brings out this menu\n\
+about - prints current shell version\n\
+uname - prints current kernel version\n\
+halt - halts the system\n\
+clear - clears the screen\n\
+uptime - tell how long the system has been running\n\
+sysfetch - prints system info\n\
+echo - prints the gven arguments\n");
+    }
+    else
+        kprintf("ksh: no such command: %s\n", cmd);
+}
+
+void shell_entry(){
+    char input[1024];
+    char *argv[100];
+    int argc;
     while(1){
         puts("\nayush@kernel >> ");
         gets(input);
-
-        if(strcmp(input, "uname") == 0)
-            kprintf("%s %d.%d.%d_%s\n", name, version, build_maj, build_min, state);
-
-        else if(strcmp(input, "halt") == 0){
-            puts("Halting the system!");
-            asm("hlt");
-        }
-
-        else if(strcmp(input, "help") == 0){
-            puts("available commands -> \n\
-            help - brings out this menu\n\
-            about - prints current shell version\n\
-            uname - prints current kernel version\n\
-            halt - halts the system\n\
-            clear - clears the screen\n\
-            uptime - tell how long the system has been running\n\
-            sysfetch - prints system info\n");
-        }
-
-        else if(strcmp(input, "about") == 0)
-            puts("Kernel SHell v1.0.0_aplha\n");
-
-        else if(strcmp(input, "clear") == 0)
-            tty_clear(tty_fg(), tty_bg());
-
-        else if(strcmp(input, "sysfetch") == 0)
-            sysfetch();
-
-        else if(strcmp(input, "uptime") == 0)
-            uptime();
-        
-        else if(strcmp(input, "mem_read") == 0)
-            mem_read();
-
-        else
-            kprintf("kshell: unknown command: %s\n", input);
+        argc = 0;
+		argv[argc] = strtok(input, "\t ");
+		while(argv[argc]) {
+			argc++;
+			argv[argc] = strtok(0, " ");
+		}
+        if(strcmp(argv[0], "exit")==0)
+            break;
+        execute(argc, argv);
     }
 }

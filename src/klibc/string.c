@@ -2,6 +2,72 @@
 #include "devices/tty.h"
 #include "devices/kbd.h"
 
+void putuhex(uint32_t n){
+    int tmp;
+
+    puts("0x");
+
+    char noZeroes = 1;
+
+    int i;
+    for (i = 28; i > 0; i -= 4){
+        tmp = (n >> i) & 0xF;
+        if (tmp == 0 && noZeroes != 0){
+            continue;
+        }
+    
+        if (tmp >= 0xA){
+            noZeroes = 0;
+            putc(tmp-0xA+'a' );
+        }
+        else{
+            noZeroes = 0;
+            putc( tmp+'0' );
+        }
+    }
+    tmp = n & 0xF;
+    if (tmp >= 0xA){
+        putc(tmp-0xA+'a');
+    }
+    else{
+        putc(tmp+'0');
+    }
+
+}
+
+void putihex(int n){
+    int tmp;
+
+    puts("0x");
+
+    char noZeroes = 1;
+
+    int i;
+    for (i = 28; i > 0; i -= 4){
+        tmp = (n >> i) & 0xF;
+        if (tmp == 0 && noZeroes != 0){
+            continue;
+        }
+    
+        if (tmp >= 0xA){
+            noZeroes = 0;
+            putc(tmp-0xA+'a' );
+        }
+        else{
+            noZeroes = 0;
+            putc( tmp+'0' );
+        }
+    }
+    tmp = n & 0xF;
+    if (tmp >= 0xA){
+        putc(tmp-0xA+'a');
+    }
+    else{
+        putc(tmp+'0');
+    }
+
+}
+
 uint32_t idgcount(int num){
     uint32_t count = 0;
     if(num == 0){
@@ -250,6 +316,32 @@ void kprintf(char *str, ...){
                     unsignedChar = va_arg(arg, int);
                     putuint((uint32_t)unsignedChar);
                     break;
+                case 'x':
+                    str++;
+                    if(*str == 'c'){
+                        character = va_arg(arg, int);
+                        putihex((int)character);
+                    }
+                    else if(*str == 'i'){
+                        integer = va_arg(arg, int);
+                        putihex(integer);
+                    }
+                    else if(*str == 'h'){
+                        unsignedChar = va_arg(arg, int);
+                        putuhex((uint32_t)unsignedChar);
+                    }
+                    else if(*str == 'u'){
+                        unsignedShort = va_arg(arg, int);
+                        putuhex((uint32_t)unsignedShort);
+                    }
+                    else if(*str == 'U'){
+                        unsignedLong = va_arg(arg, uint32_t);
+                        putuhex(unsignedLong);
+                    }
+                    else {
+                        putc(*str);
+                    }
+                    break;
                 case 's':
                     string = va_arg(arg, char *);
                     puts(string);
@@ -270,6 +362,7 @@ void kprintf(char *str, ...){
 void gets(char *buffer){
     char c;
     int i = 0;
+    tty_cursor(1);
     while(1){
         c = keyboard_read();
         if(c == '\n'){
@@ -289,4 +382,5 @@ void gets(char *buffer){
             i++;
         }
     }
+    tty_cursor(0);
 }

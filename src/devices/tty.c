@@ -29,10 +29,12 @@ void tty_putstr(const char *str){
 }
 
 void tty_setx(uint32_t value){
+    if(tty_cursor(2) == 1) return;
     current_driver->setx(value);
 }
 
 void tty_sety(uint32_t value){
+    if(tty_cursor(2) == 1) return;
     current_driver->sety(value);
 }
 
@@ -54,4 +56,16 @@ uint8_t tty_bg(){
 
 void tty_clear(uint8_t fg, uint8_t bg){
     current_driver->cls(fg, bg);
+}
+
+int tty_cursor(int status){
+    static int isLocked = 0;
+    if(status == 1)
+        isLocked = 1;
+    else if(status == 0)
+        isLocked = 0;
+    
+    else if(status > 1)
+        return isLocked;
+    return isLocked;
 }

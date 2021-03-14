@@ -27,6 +27,10 @@ void kmain(multiboot_info_t* mboot){
     puts("Launching kshell...\n");
     shell_entry();
     
+    while(1){
+        char c = keyboard_read();
+        putc(c);
+    }
     for(;;){
         asm("sti;hlt");
     }
