@@ -282,15 +282,13 @@ void putuint(uint32_t unsignedInt){
     puts(temp);
 }
 
-void kprintf(char *str, ...){
+void _vsprintf(char *str, va_list arg){
     int integer;
     char character;
     uint32_t unsignedLong;
     uint16_t unsignedShort;
     uint8_t unsignedChar;
     char *string;
-    va_list arg;
-    va_start(arg, str);
     while(*str!=0){
         if(*str == '%'){
             ++str;
@@ -356,6 +354,12 @@ void kprintf(char *str, ...){
         }
         ++str;
     }
+}
+
+void kprintf(char *str, ...){
+    va_list arg;
+    va_start(arg, str);
+    _vsprintf(str, arg);
     va_end(arg);
 }
 

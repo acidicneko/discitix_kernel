@@ -108,7 +108,7 @@ void shell_entry(){
 		argv[argc] = strtok(input, "\t ");
 		while(argv[argc]) {
 			argc++;
-			argv[argc] = strtok(0, " ");
+			argv[argc] = strtok(0, " \t");
 		}
         if(strcmp(argv[0], "exit")==0)
             break;
