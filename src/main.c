@@ -11,7 +11,7 @@
 #include "misc/shell.h"
 #include "utility/log.h"
 #include "devices/vga.h"
-
+#include "devices/vesa.h"
 
 void kmain(multiboot_info_t* mboot){
     init_tty(&vga_driver, WHITE, BLACK);
@@ -23,9 +23,21 @@ void kmain(multiboot_info_t* mboot){
     timer_install();
     keyboard_install();
     print_info();
-    
-    puts("Launching kshell...\n");
-    shell_entry();
+    init_vesa(mboot);
+    for(int i = 100; i < 300; i++){
+        vesa_putpixel(10, i, 0xffffff);
+    }
+    for(int i = 10; i < 300; i++){
+        vesa_putpixel(i, 100, 0xffffff);
+    }
+    for(int i = 100; i < 300; i++){
+        vesa_putpixel(300, i, 0xffffff);
+    }
+    for(int i = 10; i <= 300; i++){
+        vesa_putpixel(i, 300, 0xffffff);
+    }
+    //puts("Launching kshell...\n");
+    //shell_entry();
     
     while(1){
         char c = keyboard_read();

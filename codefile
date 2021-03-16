@@ -3,7 +3,7 @@
 
 (kobjs)
 build/boot.o build/gdt_asm.o build/gdt.o build/idt.o build/isr.o build/irq.o build/timer.o 
-build/memory.o build/bitmap.o build/frame.o build/log.o build/vga.o 
+build/memory.o build/bitmap.o build/frame.o build/log.o build/vga.o build/vesa.o 
 build/idt_asm.o build/kbd.o build/shell.o build/version.o build/port.o build/string.o build/tty.o build/main.o
 (kobjs)
 
@@ -25,6 +25,7 @@ $cc$ -c src/mm/frame.c -o build/frame.o $flags$;
 $cc$ -c src/misc/shell.c -o build/shell.o $flags$;
 $cc$ -c src/devices/tty.c -o build/tty.o $flags$;
 $cc$ -c src/devices/vga.c -o build/vga.o $flags$;
+$cc$ -c src/devices/vesa.c -o build/vesa.o $flags$;
 $cc$ -c src/devices/timer.c -o build/timer.o $flags$;
 $cc$ -c src/devices/kbd.c -o build/kbd.o $flags$;
 $cc$ -c src/utility/log.c -o build/log.o $flags$;
