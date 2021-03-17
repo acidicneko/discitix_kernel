@@ -24,18 +24,8 @@ void kmain(multiboot_info_t* mboot){
     keyboard_install();
     print_info();
     init_vesa(mboot);
-    for(int i = 100; i < 300; i++){
-        vesa_putpixel(10, i, 0xffffff);
-    }
-    for(int i = 10; i < 300; i++){
-        vesa_putpixel(i, 100, 0xffffff);
-    }
-    for(int i = 100; i < 300; i++){
-        vesa_putpixel(300, i, 0xffffff);
-    }
-    for(int i = 10; i <= 300; i++){
-        vesa_putpixel(i, 300, 0xffffff);
-    }
+    vesa_putstr_col("\n I am printing in VESA!!\tthis is a tab!\n this is a newline!", 0xffffff);
+    vesa_draw_rect(1, 1, 350, 100, 0xffffff);
     //puts("Launching kshell...\n");
     //shell_entry();
     

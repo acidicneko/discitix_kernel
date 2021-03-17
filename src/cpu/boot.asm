@@ -26,9 +26,9 @@ mboot:
     dd start
 
     dd 0    ;text
-    dd 1024 ;width
-    dd 768  ;height
-    dd 32   ;bpp
+    dd 0    ;width
+    dd 0    ;height
+    dd 0    ;bpp
 
 stublet:
     extern kmain
