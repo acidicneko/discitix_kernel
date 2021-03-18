@@ -30,7 +30,7 @@ void uptime(){
     }
 }
 
-void sysfetch(){
+/*void sysfetch(){
     puts("---------sysfetch---------\n");
     kprintf("kernel: \t%s %d.%d.%d_%s\nshell: \t\tKSH 1.0.0\n", name, version, build_maj, build_min, state);
     uptime();
@@ -45,7 +45,7 @@ void sysfetch(){
         tty_putchar_col(' ', tty_fg(), i);
     }
     putc('\n');
-}
+}*/
 
 
 void execute(int argc, char **argv){
@@ -60,7 +60,7 @@ void execute(int argc, char **argv){
         kprintf("\n");
     }
     else if(strcmp(cmd, "sysfetch")==0)
-        sysfetch();
+        kprintf("Coming soon!\n");
     
     else if(strcmp(cmd, "uname")==0)
         kprintf("%s %d.%d.%d_%s\nBuild %s\n", name, version, build_maj, build_min, state, __DATE__);
@@ -77,7 +77,7 @@ void execute(int argc, char **argv){
         kprintf("KSH 1.0.0\n");
     
     else if(strcmp(cmd, "clear")==0)
-        tty_clear(tty_fg(), tty_bg());
+        tty_clear(0x000000);
 
     else if(strcmp(cmd, "mem")==0)
         mem_read();

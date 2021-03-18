@@ -14,7 +14,7 @@
 #include "devices/vesa.h"
 
 void kmain(multiboot_info_t* mboot){
-    init_tty(&vga_driver, WHITE, BLACK);
+    init_tty(mboot,&vesa_driver, 0xffffff);
     gdt_install();
     idt_install();
     isrs_install();
@@ -24,10 +24,9 @@ void kmain(multiboot_info_t* mboot){
     keyboard_install();
     print_info();
     init_vesa(mboot);
-    vesa_putstr_col("\n I am printing in VESA!!\tthis is a tab!\n this is a newline!", 0xffffff);
-    vesa_draw_rect(1, 1, 350, 100, 0xffffff);
-    //puts("Launching kshell...\n");
-    //shell_entry();
+    
+    puts("Launching kshell...\n");
+    shell_entry();
     
     while(1){
         char c = keyboard_read();

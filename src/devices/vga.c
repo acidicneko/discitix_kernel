@@ -28,7 +28,7 @@ uint8_t def_fg;
 uint8_t def_bg;
 
 
-void vga_putchar_col(char c, uint8_t fg, uint8_t bg){
+void vga_putchar_col(char c, uint32_t color){
     uint32_t index = (y_pos * 80 + x_pos) * 2;
     
     if(c == '\n'){
@@ -43,13 +43,13 @@ void vga_putchar_col(char c, uint8_t fg, uint8_t bg){
         if(x_pos == 0){
             x_pos = 79;
             y_pos--;
-            vga_putchar_col(' ', fg, bg);
+            vga_putchar_col(' ', color);
             x_pos=79;
             y_pos--;
             return;
         }
         x_pos--;
-        vga_putchar_col(' ', fg, bg);
+        vga_putchar_col(' ', color);
         x_pos--;
     }
 
@@ -58,7 +58,7 @@ void vga_putchar_col(char c, uint8_t fg, uint8_t bg){
 
     else{
         vidmem[index] = c;
-        vidmem[index + 1] = (bg << 4) | (fg & 0x0F);
+        vidmem[index + 1] = (uint8_t)color;//(bg << 4) | (fg & 0x0F);
         x_pos++;
     }
     
@@ -70,21 +70,6 @@ void vga_putchar_col(char c, uint8_t fg, uint8_t bg){
     if(y_pos >= 25)
         vga_scroll();
     vga_update_cursor(x_pos, y_pos);
-}
-
-void vga_putstr_col(const char *str, uint8_t fg, uint8_t bg){
-    while(*str!=0){
-        vga_putchar_col(*str, fg, bg);
-        str++;
-    }
-}
-
-void vga_putchar(char ch){
-    vga_putchar_col(ch , def_fg, def_bg);
-}
-
-void vga_putstr(const char *string){
-    vga_putstr_col(string, def_fg, def_bg);
 }
 
 void vga_scroll(){
@@ -111,11 +96,11 @@ void vga_update_cursor(uint8_t x, uint8_t y){
     outportb(0x3D5, cursorLocation);
 }
 
-void vga_clear(uint8_t fg, uint8_t bg){
+void vga_clear(uint32_t color/*uint8_t fg, uint8_t bg*/){
     for(int i = 0; i < 80*25*2; i++){
         vidmem[i] = ' ';
         i++;
-        vidmem[i] = (bg << 4)|(fg & 0x0F);
+        vidmem[i] = (uint8_t)color;//(bg << 4)|(fg & 0x0F);
     }
     x_pos = 0;
     y_pos = 0;
@@ -140,7 +125,6 @@ uint32_t vga_gety(){
 
 void vga_setx(uint32_t value){
     if(value > 80){
-        error("value for X out of range!");
         return;
     }
     x_pos = (uint8_t)value;
@@ -148,29 +132,14 @@ void vga_setx(uint32_t value){
 }
 
 void vga_sety(uint32_t value){
-    if(value > 80){
-        error("value for Y out of range!");
+    if(value > 25){
         return;
     }
     y_pos = (uint8_t)value;
     vga_update_cursor(x_pos, y_pos);
 }
 
-void info(char *msg){
-    vga_putstr_col("[INFO] ", GREEN, def_bg);
-    vga_putstr(msg);
-    vga_putchar('\n');
-}
-
-void error(char *msg){
-    vga_putstr_col("[ERROR] ", RED, def_bg);
-    vga_putstr(msg);
-    vga_putchar('\n');
-}
-
-void init_vga(uint8_t fg, uint8_t bg){
+void init_vga(multiboot_info_t *mbootptr){
+    (void)mbootptr;
     strcpy(vga_driver.driver_name, "Standard VGA");
-    def_bg = bg;
-    def_fg = fg;
-    vga_clear(fg, bg);
 }

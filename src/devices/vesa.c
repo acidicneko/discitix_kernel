@@ -12,6 +12,11 @@ static uint32_t vesa_pitch;
 display_driver_t vesa_driver = {
     .init = init_vesa,
     .putchar_col = vesa_putchar_col,
+    .cls = vesa_cls,
+    .getx = vesa_getx,
+    .gety = vesa_gety,
+    .setx = vesa_setx,
+    .sety = vesa_sety
 };
 
 uint32_t x_cur = 0;
@@ -49,25 +54,30 @@ void vesa_putchar_col(char c, uint32_t color){
     uint8_t iy, ix;
     if(c == '\n'){
         x_cur = 0;
-        y_cur+=8;
+        y_cur += 1;
     }
     else if(c == '\r')
         x_cur = 0;
     else if(c == '\t')
         x_cur = (x_cur - (x_cur % 8)) + 8;
+    else if(c == '\b'){
+        x_cur--;
+        vesa_putchar_col(' ', color);
+        x_cur--;
+    }
     else{
         for(iy = 0; iy < 8; iy++){
             for(ix = 0; ix < 8; ix++){
                 if((font[(uint8_t)c][iy] >> ix) & 1){
-                    vesa_putpixel(ix + x_cur, iy + y_cur, color);
+                    vesa_putpixel(ix + x_cur*GLYPH_WIDTH, iy + y_cur*GLYPH_HEIGHT, color);
                 }
             }
         }
-        x_cur += 8;
+        x_cur += 1;
     }
-    if(x_cur >= 1024){
+    if(x_cur >= vesa_width/8){
         x_cur = 0;
-        y_cur+=8;
+        y_cur += 1;
     }
 }
 
@@ -76,4 +86,26 @@ void vesa_putstr_col(char *str, uint32_t color){
         vesa_putchar_col(*str, color);
         str++;
     }
+}
+
+void vesa_cls(uint32_t color){
+    vesa_draw_rect(0, 0, vesa_width - 1, vesa_height - 1, color);
+    x_cur = 0;
+    y_cur = 0;
+}
+
+uint32_t vesa_getx(){
+    return x_cur;
+}
+
+uint32_t vesa_gety(){
+    return y_cur;
+}
+
+void vesa_setx(uint32_t value){
+    x_cur = value;
+}
+
+void vesa_sety(uint32_t value){
+    y_cur = value;
 }
