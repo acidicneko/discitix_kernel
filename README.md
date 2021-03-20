@@ -1,7 +1,7 @@
 # Wolf X Kernel
 A hobbyist kernel written in C!
 
-![Settings Window](https://raw.githubusercontent.com/ayush7788/wolfx_kernel/main/screenshots/page_frame.png)
+![Settings Window](https://raw.githubusercontent.com/ayush7788/wolfx_kernel/main/screenshots/framebuffer_driver.png)
 
 ## Milestones
 - [x] Booting
@@ -13,7 +13,7 @@ A hobbyist kernel written in C!
 - [x] Timer
 - [x] Keyboard
 - [ ] Paging
-- [ ] VESA
+- [x] High resolution Framebuffer driver
 - [ ] VFS
 - [ ] Reading/Writing from/to disk
 - [ ] EXT2 FS
