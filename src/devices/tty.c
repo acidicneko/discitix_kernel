@@ -7,7 +7,7 @@ int init_tty(multiboot_info_t *mbootptr, display_driver_t* driver, uint32_t colo
     (void)color;
     current_driver = driver;
     current_driver->init(mbootptr);
-    log(INFO, "TTY Driver loaded\n\tDisplay driver: %s\n", current_driver->driver_name);
+    log(INFO, "TTY Driver loaded\n\tDisplay driver: %s\n\tBuffer address: %xU\n\tResolution: %Ux%U\tBPP: %U\n", current_driver->driver_name, current_driver->buffer_addr, current_driver->width, current_driver->height, current_driver->bpp);
     return 1;
 }
 

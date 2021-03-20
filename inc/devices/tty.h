@@ -7,6 +7,10 @@
 
 typedef struct{
     char *driver_name;
+    uint32_t width;
+    uint32_t height;
+    uint32_t bpp;
+    uint32_t* buffer_addr;
     void (*init)(multiboot_info_t *mbootptr);
     void (*putchar_col)(char c, uint32_t color);
     void (*cls)(uint32_t color);

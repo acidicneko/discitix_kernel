@@ -11,10 +11,10 @@
 #include "misc/shell.h"
 #include "utility/log.h"
 #include "devices/vga.h"
-#include "devices/vesa.h"
+#include "devices/framebuffer.h"
 
 void kmain(multiboot_info_t* mboot){
-    init_tty(mboot,&vesa_driver, 0xffffff);
+    init_tty(mboot,&framebuffer_driver, 0xffffff);
     gdt_install();
     idt_install();
     isrs_install();
@@ -23,7 +23,6 @@ void kmain(multiboot_info_t* mboot){
     timer_install();
     keyboard_install();
     print_info();
-    init_vesa(mboot);
     
     puts("Launching kshell...\n");
     shell_entry();
