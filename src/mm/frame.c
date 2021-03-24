@@ -15,7 +15,7 @@ bool initialized = false;
 extern uint32_t kernel_start;
 extern uint32_t end;
 
-void read_multiboot_mem_map_entry(multiboot_info_t* mbootptr){
+void init_frame_allocator(multiboot_info_t* mbootptr){
     calculate_mem(mbootptr);
     if(initialized == true) return;
     initialized = true;
@@ -37,12 +37,12 @@ void read_multiboot_mem_map_entry(multiboot_info_t* mbootptr){
 
     uint32_t mem_size = get_mem_bytes();
     free_memory = mem_size;
-    reserve_pages(0, 512);
+    reserve_pages(0, 512*4);
     uint32_t kernel_pages = ((uintptr_t)&end - (uintptr_t)&kernel_start) / 4096 + 1;
     reserve_pages(&kernel_start, kernel_pages);
-    uint32_t bitmap_size = mem_size / 4096 / 8 + 1;
+    uint32_t bitmap_size = (mem_size / 4096 /8) + 1;
     init_bitmap(bitmap_size, largest_free_mem_seg);
-    lock_pages(&page_bitmap, page_bitmap.size / 4096 + 1);
+    lock_pages(page_bitmap.buffer, page_bitmap.size / 4096 + 1);
     log(INFO, "Memory Map loaded\n\tKernel start: %xU\tKernel end: %xU\n\tTotal system memory: %U Bytes, %U KB, %U MB\n", kernel_start, end, mem_size, mem_size/1024, mem_size/1024/1024);
 }
 

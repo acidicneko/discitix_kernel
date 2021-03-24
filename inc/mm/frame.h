@@ -7,7 +7,7 @@
 #include "mm/bitmap.h"
 #include "cpu/multiboot.h"
 
-void read_multiboot_mem_map_entry(multiboot_info_t* mbootptr);
+void init_frame_allocator(multiboot_info_t* mbootptr);
 void init_bitmap(size_t bitmap_size, void* buf_addr);
 void free_page(void* address);
 void lock_page(void* address);

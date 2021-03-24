@@ -1,11 +1,11 @@
 [bits 32]
 
 section .text
-global gdt_flush
+global gdt_flush                    ;make gdt_flush a global function
 
 gdt_flush:
     mov     eax, DWORD [esp + 4]
-    lgdt    [eax]
+    lgdt    [eax]                   ;lgdt the passed gdt structure
 
     mov     ax, 10h
     mov     ds, ax

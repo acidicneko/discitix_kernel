@@ -1,5 +1,5 @@
-#include "devices/tty.h"
 #include "devices/kbd.h"
+#include "devices/tty.h"
 #include "klibc/string.h"
 #include "utility/log.h"
 
@@ -8,11 +8,13 @@ char buf_char;
 uint8_t last_scancode;
 
 // shift and caps flags
-static uint8_t isShift = 0;
-static uint8_t caps = 0;
+uint8_t isShift = 0;
+uint8_t caps = 0;
 
-static int irq_done = 0;
+/*keep tracks if key was pressed or not*/
+int irq_done = 0;
 
+/*English US QWERTY layout. non-shifted*/
 const char keyMap_normal[58] = {
   0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0','-', '=', '\b',
   '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n', 0,
@@ -20,6 +22,7 @@ const char keyMap_normal[58] = {
   'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 0, '*', 0, ' ',
 };
 
+/*same but shifted*/
 const char keyMap_shift[58] = {
   0, 27, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')','_', '+', '\b',
   '\t', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n', 0,
@@ -27,21 +30,22 @@ const char keyMap_shift[58] = {
   'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', 0, '*', 0, ' ',
 };
 
+/*keyboard IRQ handler*/
 void keyboard_handler(struct regs *r){
   (void)r;
-  uint8_t scancode;
-  scancode = inportb(0x60);
+  uint8_t scancode; 
+  scancode = inportb(0x60); /*read from keyboard data port*/
   switch(last_scancode){
-    case 0xE0:
+    case 0xE0:              /*was it a arrow key?*/
       handleKey_arrow(scancode);
       break;
-    default:
+    default:                /*OwO it is a normal key!*/
       handleKey_normal(scancode);
       break;
   }
 }
 
-
+/*translate a scancode to an ascii character*/
 char translate(uint8_t scancode){
   if(scancode > 58)
     return 0;
@@ -57,25 +61,27 @@ char translate(uint8_t scancode){
   return keyMap_normal[scancode];
 }
 
+/*handle a arrow key*/
 void handleKey_arrow(uint8_t scancode){
   switch(scancode){
-    case 0x48:
+    case 0x48:  /*Up key*/
       tty_sety(tty_gety() - 1);
       break;
-    case 0x50:
+    case 0x50:  /*Down key*/
       tty_sety(tty_gety() + 1);
       break;
-    case 0x4B:
+    case 0x4B:  /*Left key*/
       tty_setx(tty_getx() - 1);
       break;
-    case 0x4D:
+    case 0x4D:  /*Right key*/
       tty_setx(tty_getx() + 1);
       break;
   }
 
-  last_scancode = scancode;
+  last_scancode = scancode; /*this is the last scancode now*/
 }
 
+/*handles a normal key*/
 void handleKey_normal(uint8_t scancode){
   switch(scancode){
     case LEFT_SHIFT_PRESSED:
@@ -98,24 +104,23 @@ void handleKey_normal(uint8_t scancode){
       return;
   }
 
-  char ascii = translate(scancode);
-  if(ascii > 0){
-    buf_char = ascii;
-    irq_done = 1;
-    //putc(buf_char);
+  char ascii = translate(scancode); /*translate the scancode*/
+  if(ascii > 0){                    /*if it's a printable character*/
+    buf_char = ascii;               /*store it in the buffer character*/
+    irq_done = 1;                   /*notify that key has been handled*/
   }
-  last_scancode = scancode;
+  last_scancode = scancode;         /*this is the last scancode now*/
 }
 
-char keyboard_read(){
-  while(irq_done!=1){
+char keyboard_read(){               /*reads a single character from keyboard*/
+  while(irq_done!=1){               /*while key hasn't been pressed, wait*/
     asm volatile("sti;hlt;cli");
   }
-  irq_done = 0;
-  return buf_char;
+  irq_done = 0;                     /*key has been read, make itready for next read*/
+  return buf_char;                  /*return the buffer character*/
 }
 
-void keyboard_install(void){
-  irq_install_handler(1, keyboard_handler);
-  log(INFO, "Keyboard Installed\n");
+void keyboard_install(void){        /*keyboard installer function*/
+  irq_install_handler(1, keyboard_handler); /*register the handler for IRQ1, keyboard IRQ*/
+  log(INFO, "Keyboard Installed\n");        /*notify that keyboard has been installed*/
 }

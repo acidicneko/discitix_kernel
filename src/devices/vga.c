@@ -1,20 +1,5 @@
 #include "cpu/port.h"
 #include "devices/vga.h"
-#include "utility/log.h"
-#include "klibc/string.h"
-
-// VGA display driver
-display_driver_t vga_driver = {
-    .init = init_vga,
-    .putchar_col = vga_putchar_col,
-    .cls = vga_clear,
-    .getx = vga_getx,
-    .gety = vga_gety,
-    .getfg = vga_fg,
-    .getbg = vga_bg,
-    .setx = vga_setx,
-    .sety = vga_sety
-};
 
 // cursor cordinates
 uint8_t x_pos = 0;
@@ -28,7 +13,7 @@ uint8_t def_fg;
 uint8_t def_bg;
 
 
-void vga_putchar_col(char c, uint32_t color){
+void vga_putchar_col(char c, uint8_t fg, uint8_t bg){
     uint32_t index = (y_pos * 80 + x_pos) * 2;
     
     if(c == '\n'){
@@ -43,13 +28,13 @@ void vga_putchar_col(char c, uint32_t color){
         if(x_pos == 0){
             x_pos = 79;
             y_pos--;
-            vga_putchar_col(' ', color);
+            vga_putchar_col(' ', fg, bg);
             x_pos=79;
             y_pos--;
             return;
         }
         x_pos--;
-        vga_putchar_col(' ', color);
+        vga_putchar_col(' ', fg, bg);
         x_pos--;
     }
 
@@ -58,7 +43,7 @@ void vga_putchar_col(char c, uint32_t color){
 
     else{
         vidmem[index] = c;
-        vidmem[index + 1] = (uint8_t)color;//(bg << 4) | (fg & 0x0F);
+        vidmem[index + 1] = (bg << 4) | (fg & 0x0F);
         x_pos++;
     }
     
@@ -70,6 +55,13 @@ void vga_putchar_col(char c, uint32_t color){
     if(y_pos >= 25)
         vga_scroll();
     vga_update_cursor(x_pos, y_pos);
+}
+
+void vga_putstr_col(char *str, uint8_t fg, uint8_t bg){
+    while(*str != 0){
+        vga_putchar_col(*str, fg, bg);
+        str++;
+    }
 }
 
 void vga_scroll(){
@@ -96,11 +88,11 @@ void vga_update_cursor(uint8_t x, uint8_t y){
     outportb(0x3D5, cursorLocation);
 }
 
-void vga_clear(uint32_t color/*uint8_t fg, uint8_t bg*/){
+void vga_clear(uint8_t fg, uint8_t bg){
     for(int i = 0; i < 80*25*2; i++){
         vidmem[i] = ' ';
         i++;
-        vidmem[i] = (uint8_t)color;//(bg << 4)|(fg & 0x0F);
+        vidmem[i] = (bg << 4)|(fg & 0x0F);
     }
     x_pos = 0;
     y_pos = 0;
@@ -139,7 +131,8 @@ void vga_sety(uint32_t value){
     vga_update_cursor(x_pos, y_pos);
 }
 
-void init_vga(multiboot_info_t *mbootptr){
-    (void)mbootptr;
-    strcpy(vga_driver.driver_name, "Standard VGA");
+void init_vga(uint8_t fg, uint8_t bg){
+    def_bg = bg;
+    def_fg = fg;
+    vga_clear(fg, bg);
 }

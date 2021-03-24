@@ -1,4 +1,4 @@
-# Wolf X Kernel
+# Discitix Kernel
 A hobbyist kernel written in C!
 
 ![Settings Window](https://raw.githubusercontent.com/ayush7788/wolfx_kernel/main/screenshots/framebuffer_driver.png)

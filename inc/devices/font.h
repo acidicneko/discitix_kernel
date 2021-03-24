@@ -1,6 +1,7 @@
 #ifndef _FONT_H_
 #define _FONT_H_
 
+#include <stdint.h>
 
 static uint8_t font[129][8] = {
     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},

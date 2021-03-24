@@ -1,6 +1,7 @@
 #include "cpu/dt.h"
 #include "utility/log.h"
 
+/*the gdt_entry structure*/
 struct gdt_entry
 {
     uint16_t limit_low;
@@ -11,6 +12,7 @@ struct gdt_entry
     uint8_t base_high;
 } __attribute__((packed));
 
+/*the gdt_ptr we pass to gdt_flush function*/
 struct gdt_ptr
 {
     uint16_t limit;
@@ -20,7 +22,7 @@ struct gdt_ptr
 struct gdt_entry gdt[3];
 struct gdt_ptr gp;
 
-extern void gdt_flush();
+extern void gdt_flush();    /*declare extern gdt_flush so that it can be used in C code*/
 
 void gdt_set_gate(int num, unsigned long base, unsigned long limit, uint8_t access, uint8_t gran)
 {
@@ -43,5 +45,5 @@ void gdt_install()
     gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); /* data segment */
 
     gdt_flush(&gp); /*flush gdt pointer*/
-    log(INFO, "GDT Loaded\n");
+    log(INFO, "GDT Loaded\n");  /*notify that gdt has been loaded*/
 }

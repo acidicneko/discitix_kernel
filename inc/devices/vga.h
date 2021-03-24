@@ -2,8 +2,7 @@
 #define _VGA_H_
 
 #include <stdint.h>
-#include "devices/tty.h"
-#include "cpu/multiboot.h"
+
 enum VGA_COL {
     BLACK,
     BLUE,
@@ -23,20 +22,17 @@ enum VGA_COL {
     BRIGHT_WHITE
 };
 
-extern display_driver_t vga_driver;
-
-void vga_putchar_col(char c, uint32_t color);
+void vga_putchar_col(char c, uint8_t fg, uint8_t bg);
+void vga_putstr_col(char *str, uint8_t fg, uint8_t bg);
 void vga_scroll();
 void vga_update_cursor(uint8_t x, uint8_t y);
-void vga_clear(uint32_t color);
+void vga_clear(uint8_t fg, uint8_t bg);
 uint8_t vga_fg();
 uint8_t vga_bg();
 uint32_t vga_getx();
 uint32_t vga_gety();
 void vga_setx(uint32_t value);
 void vga_sety(uint32_t value);
-void info(char *msg);
-void error(char *msg);
-void init_vga(multiboot_info_t* mbootptr);
+void init_vga(uint8_t fg, uint8_t bg);
 
 #endif

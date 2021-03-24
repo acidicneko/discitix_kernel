@@ -1,8 +1,4 @@
 [BITS 32]
-global start
-start:
-    mov esp, _sys_stack
-    jmp stublet
 
 ALIGN 4
 mboot:
@@ -25,18 +21,26 @@ mboot:
     dd end
     dd start
 
-    dd 0    ;text
-    dd 0    ;width
-    dd 0    ;height
-    dd 0    ;bpp
+    dd 0                ;find suitable framebuffer text
+    dd 0                ;find suitable framebuffer width
+    dd 0                ;find suitable framebuffer height
+    dd 0                ;find suitable framebuffer bpp
 
-stublet:
-    extern kmain
-    push ebx
-    call kmain
-    jmp $
+global start
+start:
+    mov esp, _sys_stack ;move stack to esp
+    extern kmain        ;declare kmain is an external function
+    push ebx            ;push the multiboot structure to ebx for our kernel to read
+    call kmain          ;call the kmain function
+    jmp loop            ;if we exit the kmain somehow jump to loop function and halt the system
 
-SECTION .bss
-    resb 8192
+loop:    
+    cli                 ;disable interrupts
+    hlt                 ;halt the system
+    jmp $               ;loop indefinitely
+    
+
+SECTION .bss            ;reserve some space for .bss section in the stack
+    resb 8192           ;reserve 8KB
 
 _sys_stack:

@@ -1,16 +1,18 @@
 #include "cpu/dt.h"
-#include "utility/log.h"
 #include "klibc/string.h"
+#include "utility/log.h"
 
+/*the idt entry structure*/
 struct idt_entry
 {
-    unsigned short base_lo;
+    unsigned short base_low;
     unsigned short sel;        
-    unsigned char always0;   
+    unsigned char always_zero;   
     unsigned char flags;       
-    unsigned short base_hi;
+    unsigned short base_high;
 } __attribute__((packed));
 
+/*the idt pointer we pass to idt_flush function*/
 struct idt_ptr
 {
     unsigned short limit;
@@ -20,6 +22,7 @@ struct idt_ptr
 struct idt_entry idt[256];
 struct idt_ptr idtp;
 
+/*declare all the ISRs extern so that we can use them in C code*/
 extern void isr0 ();
 extern void isr1 ();
 extern void isr2 ();
@@ -71,13 +74,13 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-extern void idt_load(struct idt_ptr*);
+extern void idt_load(struct idt_ptr*);  /*declare the extern idt_load function*/
 
 void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, unsigned char flags){
-    idt[num].base_lo = (base & 0xFFFF);
-    idt[num].base_hi = (base >> 16) & 0xFFFF;
+    idt[num].base_low = (base & 0xFFFF);
+    idt[num].base_high = (base >> 16) & 0xFFFF;
     idt[num].sel = sel;
-    idt[num].always0 = 0;
+    idt[num].always_zero = 0;
     idt[num].flags = flags /* | 0x60 */; /* for user-mode */
 }
 
@@ -86,6 +89,6 @@ void idt_install()
     idtp.limit = (sizeof (struct idt_entry) * 256) - 1;
     idtp.base = (uint32_t)&idt;
     memset(&idt, 0, sizeof(struct idt_entry) * 256);
-    idt_load(&idtp);
-    log(INFO, "IDT loaded\n");
+    idt_load(&idtp);    /*load the idt*/
+    log(INFO, "IDT loaded\n");  /*notify that IDT has been loaded*/
 }

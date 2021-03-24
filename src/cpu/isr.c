@@ -2,6 +2,7 @@
 #include "utility/log.h"
 #include "klibc/string.h"
 
+/*all ISR function from asm*/
 extern void isr0();
 extern void isr1();
 extern void isr2();
@@ -35,6 +36,7 @@ extern void isr29();
 extern void isr30();
 extern void isr31();
 
+/*installer for ISRs*/
 void isrs_install()
 {
     idt_set_gate(0, (unsigned)isr0, 0x08, 0x8E);
@@ -72,9 +74,10 @@ void isrs_install()
     idt_set_gate(29, (unsigned)isr29, 0x08, 0x8E);
     idt_set_gate(30, (unsigned)isr30, 0x08, 0x8E);
     idt_set_gate(31, (unsigned)isr31, 0x08, 0x8E);
-    log(INFO, "ISRs Installed\n");
+    log(INFO, "ISRs Installed\n");  /*notify that ISRs have been installed*/
 }
 
+/*messages for what has happened*/
 const char *exception_messages[] =
 {
     "Division By Zero",
@@ -114,10 +117,11 @@ const char *exception_messages[] =
     "Reserved"
 };
 
+/*common fault handler for ISRs*/
 void fault_handler(struct regs *r)
 {
-    if (r->int_no < 32){
-        log(ERROR, "Exception Raised! %s exception. System Halted!\n", exception_messages[r->int_no]);
-        for (;;);
+    if (r->int_no < 32){    
+        log(ERROR, "Exception Raised! %s exception. System Halted!\n", exception_messages[r->int_no]);/*raise an error*/
+        for (;;);   /*halt the system*/
     }
 }
