@@ -1,7 +1,7 @@
 # Discitix Kernel
 A hobbyist kernel written in C!
 
-![Settings Window](https://raw.githubusercontent.com/ayush7788/wolfx_kernel/main/screenshots/discitix_logo.png)
+![Settings Window](https://raw.githubusercontent.com/ayush7788/discitix_kernel/main/screenshots/discitix_logo.png)
 ## About
 The word, 'Discitix', has been derived from the latin word, 'Discite', which means "to learn".
 This kernel is beign developed by me for fun and to learn about low-level world of computers.
@@ -13,8 +13,7 @@ And this kernel is being developed to gain only knowledge! Isn't it?
 This is a testing and learning kernel and not a daily driver and in future too, it won't be!
 
 ### Discitix in action
-![Settings Window](https://raw.githubusercontent.com/ayush7788/wolfx_kernel/main/screenshots/discitix.png)
-
+![Settings Window](https://raw.githubusercontent.com/ayush7788/disctix_kernel/main/screenshots/discitix.png)
 ### Milestones
 - [x] Booting
 - [x] VGA Driver
