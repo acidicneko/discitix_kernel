@@ -16,6 +16,8 @@ uint32_t tty_getx();
 uint32_t tty_gety();
 uint32_t tty_fg();
 uint32_t tty_bg();
+void tty_setfg();
+void tty_setbg();
 void tty_clear(uint32_t color);
 int tty_cursor(int status);
 

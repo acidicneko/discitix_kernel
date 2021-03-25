@@ -77,8 +77,33 @@ void execute(int argc, char **argv){
         kprintf("KSH 1.0.0\n");
     
     else if(strcmp(cmd, "clear")==0)
-        tty_clear(0x000000);
-
+        tty_clear(tty_bg());
+    else if(strcmp(cmd, "themer")==0){
+        if(strcmp("help", argv[1])==0)
+            kprintf("Change themes!\navailable themes -\ndefault\nforest\nnight\nruby\n");
+        else if(strcmp("default", argv[1])==0){
+            tty_setfg(0xffffff);
+            tty_setbg(0x000000);
+            tty_clear(tty_bg());
+        }
+        else if(strcmp("forest", argv[1])==0){
+            tty_setfg(0xffffff);
+            tty_setbg(0x03a88a);
+            tty_clear(tty_bg());
+        }
+        else if(strcmp("night", argv[1])==0){
+            tty_setfg(0xffffff);
+            tty_setbg(0x06104f);
+            tty_clear(tty_bg());
+        }
+        else if(strcmp("ruby", argv[1])==0){
+            tty_setfg(0xffffff);
+            tty_setbg(0x960e0e);
+            tty_clear(tty_bg());
+        }
+        else
+            kprintf("themer: unknown theme: %s\n", argv[1]);
+    }
     else if(strcmp(cmd, "mem")==0)
         mem_read();
 

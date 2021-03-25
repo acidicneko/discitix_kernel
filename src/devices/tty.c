@@ -9,6 +9,7 @@ int init_tty(multiboot_info_t *mbootptr, uint32_t fg, uint32_t bg){ /*initilaise
     int status = init_framebuffer(mbootptr);    /*initlaise Framebuffer driver*/
     current_fg = fg;
     current_bg = bg;
+    tty_clear(bg);
     log(INFO, "TTY Driver loaded\n");           /*notify that TTY driver has been loaded*/
     return status;
 }
@@ -51,6 +52,14 @@ uint32_t tty_getx(){
 
 uint32_t tty_gety(){
     return (uint32_t)framebuffer_gety();
+}
+
+void tty_setbg(uint32_t color){
+    current_bg = color;
+}
+
+void tty_setfg(uint32_t color){
+    current_fg = color;
 }
 
 uint32_t tty_fg(){
