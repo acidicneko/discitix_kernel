@@ -24,11 +24,10 @@ void init_frame_allocator(multiboot_info_t* mbootptr){
     size_t largest_free_mem_seg_size = 0;
 
     multiboot_memory_map_t *entry = (multiboot_memory_map_t*)mbootptr->mmap_addr;
-    uint32_t mem_limit = mbootptr->mmap_addr + mbootptr->mmap_length;
-    while((uint32_t)entry < mem_limit){
+    while((uint32_t)entry < mbootptr->mmap_addr + mbootptr->mmap_length){
         if(entry->type == 1){
             if((entry->addr + entry->len) > largest_free_mem_seg_size){
-                largest_free_mem_seg = (void*)(long unsigned int)entry->addr;
+                largest_free_mem_seg = (void*)((uint32_t)entry->addr);
                 largest_free_mem_seg_size = entry->addr + entry->len;
             }
         }
@@ -37,7 +36,7 @@ void init_frame_allocator(multiboot_info_t* mbootptr){
 
     uint32_t mem_size = get_mem_bytes();
     free_memory = mem_size;
-    reserve_pages(0, 512*4);
+    reserve_pages(0, 256*4);
     uint32_t kernel_pages = ((uintptr_t)&end - (uintptr_t)&kernel_start) / 4096 + 1;
     reserve_pages(&kernel_start, kernel_pages);
     uint32_t bitmap_size = (mem_size / 4096 /8) + 1;
@@ -55,6 +54,10 @@ void init_bitmap(size_t bitmap_size, void* buf_addr){
 }
 
 void free_page(void* address){
+    if(!initialized){
+        log(ERROR, "please initialize PMM first!\n");
+        return;
+    }
     uint32_t index = (uint32_t)address / 4096;
     if(find(&page_bitmap, index) == false) return;
     set(&page_bitmap, index, false);
@@ -69,6 +72,10 @@ void free_pages(void* address, uint32_t page_count){
 }
 
 void lock_page(void* address){
+    if(!initialized){
+        log(ERROR, "please initialize PMM first!\n");
+        return;
+    }
     uint32_t index = (uint32_t)address / 4096;
     if(find(&page_bitmap, index) == true) return;
     set(&page_bitmap, index, true);
@@ -83,6 +90,10 @@ void lock_pages(void* address, uint32_t page_count){
 }
 
 void unreserve_page(void* address){
+    if(!initialized){
+        log(ERROR, "please initialize PMM first!\n");
+        return;
+    }
     uint32_t index = (uint32_t)address / 4096;
     if(find(&page_bitmap, index) == false) return;
     set(&page_bitmap, index, false);
@@ -97,6 +108,10 @@ void unreserve_pages(void* address, uint32_t page_count){
 }
 
 void reserve_page(void* address){
+    if(!initialized){
+        log(ERROR, "please initialize PMM first!\n");
+        return;
+    }
     uint32_t index = (uint32_t)address / 4096;
     if(find(&page_bitmap, index) == true) return;
     set(&page_bitmap, index, true);
@@ -111,6 +126,10 @@ void reserve_pages(void* address, uint32_t page_count){
 }
 
 void* request_page(){
+    if(!initialized){
+        log(ERROR, "please initialize PMM first!\n");
+        return NULL;
+    }
     for(uint32_t index = 0; index <page_bitmap.size * 8; index++){
         if(find(&page_bitmap, index) == true) continue;
         lock_page((void*)(index*4096));

@@ -2,6 +2,7 @@
 #include "devices/font.h"
 #include "devices/framebuffer.h"
 #include "klibc/string.h"
+#include "mm/frame.h"
 #include "utility/log.h"
 
 uint32_t *framebuffer_buffer = NULL;    /*pointer to physical address of framebuffer*/
@@ -15,7 +16,7 @@ uint32_t x_cur = 0;                 /*current position of cursor in X-axis*/
 uint32_t y_cur = 0;                 /*same but for Y-axis*/
 
 int init_framebuffer(multiboot_info_t* mboot){  /*initialize the framebuffer*/
-    framebuffer_buffer = (uint32_t*)((uintptr_t)mboot->framebuffer_addr);   /*the address of framebuffer*/
+    framebuffer_buffer = (uint32_t*)((uintptr_t)mboot->framebuffer_addr);   /*the address of framebuffer*/    
     framebuffer_bpp = mboot->framebuffer_bpp;
     framebuffer_pitch = mboot->framebuffer_pitch;
     framebuffer_height = mboot->framebuffer_height;
