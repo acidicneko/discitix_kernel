@@ -1,10 +1,10 @@
 #include "mm/frame.h"
 #include "mm/memory.h"
-#include "klibc/string.h"
+#include "klibc/stdio.h"
 #include "utility/log.h"
 #include "devices/tty.h"
 
-static bitmap_t page_bitmap;
+bitmap_t page_bitmap;
 
 uint32_t free_memory = 0;
 uint32_t reserved_memory = 0;
@@ -26,7 +26,7 @@ void init_frame_allocator(multiboot_info_t* mbootptr){
     multiboot_memory_map_t *entry = (multiboot_memory_map_t*)mbootptr->mmap_addr;
     while((uint32_t)entry < mbootptr->mmap_addr + mbootptr->mmap_length){
         if(entry->type == 1){
-            if((entry->addr + entry->len) > largest_free_mem_seg_size){
+            if(entry->addr + entry->len > largest_free_mem_seg_size){
                 largest_free_mem_seg = (void*)((uint32_t)entry->addr);
                 largest_free_mem_seg_size = entry->addr + entry->len;
             }
@@ -36,18 +36,19 @@ void init_frame_allocator(multiboot_info_t* mbootptr){
 
     uint32_t mem_size = get_mem_bytes();
     free_memory = mem_size;
-    reserve_pages(0, 256*4);
-    uint32_t kernel_pages = ((uintptr_t)&end - (uintptr_t)&kernel_start) / 4096 + 1;
-    reserve_pages(&kernel_start, kernel_pages);
     uint32_t bitmap_size = (mem_size / 4096 /8) + 1;
     init_bitmap(bitmap_size, largest_free_mem_seg);
     lock_pages(page_bitmap.buffer, page_bitmap.size / 4096 + 1);
+    reserve_pages(0, 256*4);
+    uint32_t kernel_pages = ((uintptr_t)&end - (uintptr_t)&kernel_start) / 4096 + 1;
+    reserve_pages(&kernel_start, kernel_pages);
     log(INFO, "Memory Map loaded\n\tKernel start: %xU\tKernel end: %xU\n\tTotal system memory: %U Bytes, %U KB, %U MB\n", kernel_start, end, mem_size, mem_size/1024, mem_size/1024/1024);
 }
 
 void init_bitmap(size_t bitmap_size, void* buf_addr){
     page_bitmap.size = bitmap_size;
     page_bitmap.buffer = (uint8_t*)buf_addr;
+    //memset((void*)page_bitmap.buffer, 0, page_bitmap.size);
     for(size_t i = 0; i < bitmap_size; i++){
         *(uint8_t*)page_bitmap.buffer[i] = 0;
     }

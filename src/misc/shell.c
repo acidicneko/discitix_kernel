@@ -1,4 +1,5 @@
 #include "klibc/string.h"
+#include "klibc/stdio.h"
 #include "misc/shell.h"
 #include "devices/kbd.h"
 #include "devices/tty.h"
@@ -78,6 +79,7 @@ void execute(int argc, char **argv){
     
     else if(strcmp(cmd, "clear")==0)
         tty_clear(tty_bg());
+    
     else if(strcmp(cmd, "themer")==0){
         if(strcmp("help", argv[1])==0)
             kprintf("Change themes!\navailable themes -\ndefault\nforest\nnight\nruby\n");
@@ -104,6 +106,7 @@ void execute(int argc, char **argv){
         else
             kprintf("themer: unknown theme: %s\n", argv[1]);
     }
+    
     else if(strcmp(cmd, "mem")==0)
         mem_read();
 

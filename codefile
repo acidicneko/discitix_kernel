@@ -4,7 +4,7 @@
 (kobjs)
 build/boot.o build/gdt_asm.o build/gdt.o build/idt.o build/isr.o build/irq.o build/timer.o 
 build/memory.o build/bitmap.o build/frame.o build/log.o build/vga.o build/framebuffer.o 
-build/idt_asm.o build/kbd.o build/shell.o build/version.o build/port.o build/string.o build/tty.o build/main.o
+build/idt_asm.o build/kbd.o build/shell.o build/version.o build/port.o build/string.o build/stdio.o build/tty.o build/main.o
 (kobjs)
 
 
@@ -18,6 +18,7 @@ $cc$ -c src/cpu/idt.c -o build/idt.o $flags$;
 $cc$ -c src/cpu/isr.c -o build/isr.o $flags$;
 $cc$ -c src/cpu/irq.c -o build/irq.o $flags$;
 $cc$ -c src/klibc/string.c -o build/string.o $flags$;
+$cc$ -c src/klibc/stdio.c -o build/stdio.o $flags$;
 $cc$ -c src/misc/version.c -o build/version.o $flags$;
 $cc$ -c src/mm/memory.c -o build/memory.o $flags$;
 $cc$ -c src/mm/bitmap.c -o build/bitmap.o $flags$;

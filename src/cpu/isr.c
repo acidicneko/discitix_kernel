@@ -1,6 +1,5 @@
 #include "cpu/dt.h"
 #include "utility/log.h"
-#include "klibc/string.h"
 
 /*all ISR function from asm*/
 extern void isr0();

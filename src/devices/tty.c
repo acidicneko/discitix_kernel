@@ -27,6 +27,22 @@ void tty_putstr_col(const char *str, uint32_t color){
         str++;
     }
 }
+/* This function is under construction!!
+ It will provide some basic ANSI escape sequences!*/
+/*void tty_write(char *data){
+    while(*str != 0){
+        if(*str == '\033'){
+            str++;
+            char *cmd = NULL;
+            while(*str!='m')
+                *cmd++ = *str++;
+            argv[0] = strtok(cmd, ";");
+            argv[1] = strtok(0, ";");
+
+        }
+    }
+}*/
+
 
 void tty_putchar(char c){
     tty_putchar_col(c, current_fg);

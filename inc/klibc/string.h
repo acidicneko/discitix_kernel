@@ -16,14 +16,13 @@ char *strcat(char *d, const char *s);
 char *strtok(char *s, const char *delim);
 const char *strchr(const char *s, char ch);
 
-//uint32_t dgcount(int num);
 void itoa(int num, char *dest);
 void utoa(uint32_t num, char *dest);
-void putint(int);
-void putuint(uint32_t);
-void puts(const char *str);
-void putc(char ch);
-void _vsprintf(char *str, va_list arg);
-void kprintf(char *str, ...);
-void gets();
+// void putint(int);
+// void putuint(uint32_t);
+// void puts(const char *str);
+// void putc(char ch);
+// void _vsprintf(char *str, va_list arg);
+// void kprintf(char *str, ...);
+// void gets();
 #endif

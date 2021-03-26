@@ -4,16 +4,13 @@
 #include "devices/tty.h"
 #include "devices/timer.h"
 #include "devices/vga.h"
-#include "klibc/string.h"
-#include "mm/bitmap.h"
-#include "mm/memory.h"
+#include "klibc/stdio.h"
 #include "mm/frame.h"
 #include "misc/version.h"
 #include "misc/shell.h"
-#include "utility/log.h"
 
 void kmain(multiboot_info_t* mboot){
-    if(!init_tty(mboot, 0xffffff, 0x000000)){   /*if no framebuffer is found, use VGA to print error message and halt away!*/
+    if(!init_tty(mboot, 0xffffff, 0x06104f)){   /*if no framebuffer is found, use VGA to print error message and halt away!*/
         vga_putstr_col("No Framebuffer found!\nFatal Error! Halting the system!", WHITE, BLACK);
         asm("cli;hlt");
     }

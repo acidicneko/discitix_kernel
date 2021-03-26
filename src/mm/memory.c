@@ -1,5 +1,5 @@
 #include "mm/memory.h"
-#include "klibc/string.h"
+#include "klibc/stdio.h"
 #include "utility/log.h"
 
 uint32_t memory_bytes = 0;

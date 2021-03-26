@@ -13,7 +13,7 @@ And this kernel is being developed to gain only knowledge! Isn't it?
 This is a testing and learning kernel and not a daily driver and in future too, it won't be!
 
 ### Discitix in action
-![Settings Window](https://raw.githubusercontent.com/ayush7788/discitix_kernel/main/screenshots/disctix.png)
+![Settings Window](https://raw.githubusercontent.com/ayush7788/discitix_kernel/main/screenshots/night_theme.png)
 ### Milestones
 - [x] Booting
 - [x] VGA Driver

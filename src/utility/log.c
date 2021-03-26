@@ -1,7 +1,6 @@
 #include "utility/log.h"
 #include "devices/tty.h"
-#include "klibc/string.h"
-#include "devices/vga.h"
+#include "klibc/stdio.h"
 
 void log(int status, char *str, ...){
     va_list arg;
