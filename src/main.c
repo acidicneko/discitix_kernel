@@ -22,7 +22,12 @@ void kmain(multiboot_info_t* mboot){
     timer_install();    /*install PIT*/
     keyboard_install(); /*install keyboard*/
     print_info();       /*print kernel information, eg. name, version, licensing, etc*/
-    
+    /* reserve kernel pages*/
+    reserve_pages(0, 256*4);
+    uint32_t kernel_pages = ((uintptr_t)&end - (uintptr_t)&kernel_start) / 4096 + 1;
+    reserve_pages(&kernel_start, kernel_pages);
+
+    /*Go away now*/
     puts("Launching kshell...\n");
     shell_entry();      /*launch interactive kshell*/
     

@@ -84,8 +84,7 @@ void framebuffer_putstr_col(char *str, uint32_t color){
     }
 }
 
-void framebuffer_cls(uint32_t color){       /*this doesn't works!!*/
-    //memset((void*)framebuffer_buffer, color, (framebuffer_height * framebuffer_width) + (uint32_t)framebuffer_buffer);  /*TODO!!*/
+void framebuffer_cls(uint32_t color){
     for(uint32_t i = 0; i < (framebuffer_height * framebuffer_width); i++){
         framebuffer_buffer[i] = color;
     }

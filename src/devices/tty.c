@@ -1,5 +1,6 @@
 #include "devices/framebuffer.h"
 #include "devices/tty.h"
+#include "klibc/stdio.h"
 #include "utility/log.h"
 
 uint32_t current_fg;    /*current foregorund color*/

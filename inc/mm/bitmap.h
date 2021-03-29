@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 typedef struct{
-    size_t size;
+    uint32_t size;
     uint8_t* buffer;
 } bitmap_t;
 

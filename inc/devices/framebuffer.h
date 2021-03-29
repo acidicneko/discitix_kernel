@@ -8,6 +8,8 @@
 #define GLYPH_HEIGHT    8
 #define GLYPH_WIDTH     8
 
+extern uint32_t* framebuffer_buffer;
+
 int init_framebuffer(multiboot_info_t* mboot);
 void framebuffer_putpixel(uint32_t x, uint32_t y, uint32_t color);
 void framebuffer_draw_rect(uint32_t startx, uint32_t starty, uint32_t stopx, uint32_t stopy, uint32_t color);
